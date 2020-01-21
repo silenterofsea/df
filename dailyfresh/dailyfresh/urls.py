@@ -1,5 +1,5 @@
 """dailyfresh URL Configuration
-
+d
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1/topics/http/urls/
 Examples:
@@ -18,5 +18,8 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/', include('apps.user.urls')),
+    path('user/', include('user.urls')),
+    path('order/', include('order.urls', namespace='order')),
+    path('cart/', include('cart.urls', namespace='cart')),
+    path('', include('goods.urls', namespace='goods')),
 ]
