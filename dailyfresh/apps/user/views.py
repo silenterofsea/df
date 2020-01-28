@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.conf import settings
+from django.http import HttpResponse
+from django.contrib.auth import authenticate, login
 # from django.core.mail import send_mail
 from .models import User
 import re
 from django.views.generic import View
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import SignatureExpired
-from django.conf import settings
-from django.http import HttpResponse
 from celery_tasks.tasks import send_register_active_email
 
 # user/register
@@ -165,6 +166,44 @@ class ActiveView(View):
 
 
 class LoginView(View):
+	'''显示登录页面'''
 	def get(self, request):
 		return render(request, 'login.html')
+
+	'''处理登录业务'''
+	def post(self, request):
+		# 接受数据
+		username = request.POST.get('username')
+		password = request.POST.get('pwd')
+		# 校验数据
+		if not all([username, password]):
+			return render(request, 'login.html', {'errmsg': '用户名或者密码不能为空'})
+		# 处理数据：业务操作
+		user = authenticate(username=username, password=password)
+		if user is not None:
+			# 用户验证通过
+			print('user.is_active = ', user.is_active)
+			if user.is_active:
+				# 用户已经激活
+				login(request, user)
+
+				response = redirect(reverse('goods:index'))  # HttpResponseRedirect
+				# 获取＂记住用户名＂
+				checked = request.POST.get('checked')
+				# 判断是否勾选
+				if checked == 'on':
+					# 勾选：设置cookie
+					response.set_cookie('username', username, max_age=7*24*3600)
+				else:
+					# 没有勾选：设置cookie，取消记住
+					response.delete_cookie('username')
+
+				return response
+			else:
+				# 用户未激活，指引用户去激活页面（目前激活页面不存在）
+				return redirect(reverse('user:register'))
+		else:
+			# 用户不存在
+			return render(request, 'login.html', {'errmsg': '用户名或者密码不正确'})
+		# 响应数据
 

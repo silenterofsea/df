@@ -158,3 +158,19 @@ EMAIL_PORT = 25     # 发件箱的SMTP服务器端口
 EMAIL_HOST_USER = 'janrone@163.com'    # 发送邮件的邮箱地址
 EMAIL_HOST_PASSWORD = 'jiaozhitou66'   # 发送邮件的邮箱密码(这里使用的是授权码)
 EMAIL_PROM = '天天生鲜<janrone@163.com>'  # 收件人看到的发件人
+
+# redis缓存服务器
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/9",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# 配置session的存储
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
