@@ -174,3 +174,6 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
+# 配置没有登录去访问需要登录页面时候的跳转页面
+LOGIN_URL = '/user/login'
+

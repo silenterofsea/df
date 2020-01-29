@@ -186,8 +186,9 @@ class LoginView(View):
 			if user.is_active:
 				# 用户已经激活
 				login(request, user)
-
-				response = redirect(reverse('goods:index'))  # HttpResponseRedirect
+				# 获取登录后要跳转到的页面
+				next_url = request.GET.get('next', reverse('goods:index'))
+				response = redirect(next_url)  # HttpResponseRedirect
 				# 获取＂记住用户名＂
 				checked = request.POST.get('checked')
 				# 判断是否勾选
@@ -206,4 +207,28 @@ class LoginView(View):
 			# 用户不存在
 			return render(request, 'login.html', {'errmsg': '用户名或者密码不正确'})
 		# 响应数据
+
+
+# /user
+class UserInfoView(View):
+	'''用户信息中心'''
+	def get(self, request):
+		# page=user
+		return render(request, 'user_center_info.html', {'page': 'user'})
+
+
+# /user/order
+class UserOrderView(View):
+	'''用户订单信息页面'''
+	def get(self, request):
+		# page = order
+		return render(request, 'user_center_order.html', {'page': 'order'})
+
+
+# /user/address
+class AddressView(View):
+	'''用户地址信息页面'''
+	# page = address
+	def get(self, request):
+		return render(request, 'user_center_site.html', {'page': 'address'})
 
