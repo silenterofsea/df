@@ -4,11 +4,11 @@
 				<h3 class="common_title2">收货地址</h3>
 				<div class="site_con">
 					<dl>
-						<dt>当前地址：</dt>
+						<dt>当前默认收货地址：</dt>
                         {% if address %}
 						    <dd>{{ address.addr }} （{{ address.receiver }} 收） {{ address.phone }}</dd>
 					    {% else %}
-                            <dd>无</dd>
+                            <dd>当前并无默认收货地址</dd>
                         {% endif %}
                     </dl>
 				</div>
@@ -35,6 +35,7 @@
 
 						<input type="submit" name="" value="提交" class="info_submit">
 					</form>
+					{{ errmsg }}
 				</div>
 		</div>
 {% endblock right_content %}

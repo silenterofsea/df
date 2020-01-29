@@ -11,6 +11,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import SignatureExpired
 from utils.mixin import LoginRequiredMixin
 from celery_tasks.tasks import send_register_active_email
+from .models import Address
 
 
 # user/register
@@ -250,5 +251,43 @@ class AddressView(LoginRequiredMixin, View):
 	'''用户地址信息页面'''
 	# page = address
 	def get(self, request):
-		return render(request, 'user_center_site.html', {'page': 'address'})
+		user = request.user
+		try:
+			address = Address.objects.get(user=user, is_default=True)
+		except Address.DoesNotExist:
+			address = None
+
+		return render(request, 'user_center_site.html', {'page': 'address', 'address': address})
+
+	def post(self, request):
+		receiver = request.POST.get('receiver')
+		addr = request.POST.get('addr')
+		zip_code = request.POST.get('zip_code')
+		phone = request.POST.get('phone')
+		user = request.user
+
+		if not all([receiver, addr, phone]):
+			return render(request, 'user_center_site.html', {'errmsg': '填写数据不完整，请检查'})
+
+		if not re.match(r"^1(3|4|5|6|7|8|9)\d{9}$", phone):
+			return render(request, 'user_center_site.html', {'errmsg': '填写手机号码有误'})
+
+		try:
+			address = Address.objects.get(user=user, is_default=True)
+		except Address.DoesNotExist:
+			address = None
+
+		if address:
+			is_default = False
+		else:
+			is_default = True
+
+		Address.objects.create(user=user,
+							   receiver=receiver,
+							   addr=addr,
+							   zip_code=zip_code,
+							   phone=phone,
+							   is_default=is_default)
+		return redirect(reverse('user:address'))
+
 
