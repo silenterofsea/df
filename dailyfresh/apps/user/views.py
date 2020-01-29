@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.conf import settings
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 # from django.core.mail import send_mail
 from .models import User
 import re
@@ -170,7 +170,15 @@ class ActiveView(View):
 class LoginView(View):
 	'''显示登录页面'''
 	def get(self, request):
-		return render(request, 'login.html')
+		# 显示登录页面
+		# 判断是否记住密码
+		if 'username' in request.COOKIES:
+			username = request.COOKIES.get('username')  # request.COOKIES['username']
+			checked = 'checked'
+		else:
+			username = ''
+			checked = ''
+		return render(request, 'login.html', {'username': username, 'checked': checked})
 
 	'''处理登录业务'''
 	def post(self, request):
@@ -190,11 +198,14 @@ class LoginView(View):
 				login(request, user)
 				# 获取登录后要跳转到的页面
 				next_url = request.GET.get('next', reverse('goods:index'))
+
+				print(request.GET.get('next', ''))
+				print('next_url = ', next_url)
 				response = redirect(next_url)  # HttpResponseRedirect
 				# 获取＂记住用户名＂
-				checked = request.POST.get('checked')
+				remember = request.POST.get('remember')
 				# 判断是否勾选
-				if checked == 'on':
+				if remember == 'on':
 					# 勾选：设置cookie
 					response.set_cookie('username', username, max_age=7*24*3600)
 				else:
@@ -209,6 +220,13 @@ class LoginView(View):
 			# 用户不存在
 			return render(request, 'login.html', {'errmsg': '用户名或者密码不正确'})
 		# 响应数据
+
+
+class LogoutView(View):
+	def get(self, request):
+		logout(request)
+		return redirect(reverse('goods:index'))
+
 
 
 # /user

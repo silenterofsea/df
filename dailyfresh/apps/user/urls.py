@@ -1,7 +1,7 @@
 from django.urls import path
 # from django.contrib.auth.decorators import login_required
 # from . import views
-from .views import RegisterView, LoginView, ActiveView, UserInfoView, UserOrderView, AddressView
+from .views import RegisterView, LoginView, ActiveView, UserInfoView, UserOrderView, AddressView, LogoutView
 
 app_name = 'user'
 
@@ -16,5 +16,6 @@ urlpatterns = [
     # path('', login_required(UserInfoView.as_view()), name='user')  # 用户中心
     path('order', UserOrderView.as_view(), name='order'),  # 用户订单信息
     path('address', AddressView.as_view(), name='address'),  # 用户地址信息
-    path('', UserInfoView.as_view(), name='user')  # 用户中心
+    path('', UserInfoView.as_view(), name='user'),  # 用户中心
+    path('logout', LogoutView.as_view(), name='logout')
 ]
