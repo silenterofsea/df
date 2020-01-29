@@ -252,11 +252,11 @@ class AddressView(LoginRequiredMixin, View):
 	# page = address
 	def get(self, request):
 		user = request.user
-		try:
-			address = Address.objects.get(user=user, is_default=True)
-		except Address.DoesNotExist:
-			address = None
-
+		# try:
+		# 	address = Address.objects.get(user=user, is_default=True)
+		# except Address.DoesNotExist:
+		# 	address = None
+		address = Address.objects.get_default_address(user)
 		return render(request, 'user_center_site.html', {'page': 'address', 'address': address})
 
 	def post(self, request):
@@ -272,10 +272,11 @@ class AddressView(LoginRequiredMixin, View):
 		if not re.match(r"^1(3|4|5|6|7|8|9)\d{9}$", phone):
 			return render(request, 'user_center_site.html', {'errmsg': '填写手机号码有误'})
 
-		try:
-			address = Address.objects.get(user=user, is_default=True)
-		except Address.DoesNotExist:
-			address = None
+		# try:
+		# 	address = Address.objects.get(user=user, is_default=True)
+		# except Address.DoesNotExist:
+		# 	address = None
+		address = Address.objects.get_default_address(user)
 
 		if address:
 			is_default = False
