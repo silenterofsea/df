@@ -9,7 +9,9 @@ import re
 from django.views.generic import View
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import SignatureExpired
+from utils.mixin import LoginRequiredMixin
 from celery_tasks.tasks import send_register_active_email
+
 
 # user/register
 def register(request):
@@ -210,7 +212,7 @@ class LoginView(View):
 
 
 # /user
-class UserInfoView(View):
+class UserInfoView(LoginRequiredMixin, View):
 	'''用户信息中心'''
 	def get(self, request):
 		# page=user
@@ -218,7 +220,7 @@ class UserInfoView(View):
 
 
 # /user/order
-class UserOrderView(View):
+class UserOrderView(LoginRequiredMixin, View):
 	'''用户订单信息页面'''
 	def get(self, request):
 		# page = order
@@ -226,7 +228,7 @@ class UserOrderView(View):
 
 
 # /user/address
-class AddressView(View):
+class AddressView(LoginRequiredMixin, View):
 	'''用户地址信息页面'''
 	# page = address
 	def get(self, request):
