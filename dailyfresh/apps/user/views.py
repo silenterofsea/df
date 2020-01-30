@@ -12,6 +12,8 @@ from itsdangerous import SignatureExpired
 from utils.mixin import LoginRequiredMixin
 from celery_tasks.tasks import send_register_active_email
 from .models import Address
+from django_redis import get_redis_connection
+from apps.goods.models import GoodsSKU
 
 
 # user/register
@@ -229,13 +231,35 @@ class LogoutView(View):
 		return redirect(reverse('goods:index'))
 
 
-
 # /user
 class UserInfoView(LoginRequiredMixin, View):
 	'''用户信息中心'''
 	def get(self, request):
 		# page=user
-		return render(request, 'user_center_info.html', {'page': 'user'})
+		# 获取个人信息
+		user = request.user
+		address = Address.objects.get_default_address(user)
+		# 获取最近浏览商品信息
+		# from redis import StrictRedis
+		# str = StrictRedis(host='localhost', port='6379', db=9)
+		con = get_redis_connection('default')
+
+		history_key = 'history_%d'%user.id
+		# 获取用户最新浏览的５个商品的ID
+		sku_ids = con.lrange(history_key, 0, 4)
+
+		goods_li = []
+		for pid in sku_ids:
+			goods = GoodsSKU.objects.get(id=pid)
+			goods_li.append(goods)
+
+		# 组织上下文
+		context = {
+			'page': 'user',
+			'address': address,
+			'goods_li': goods_li
+		}
+		return render(request, 'user_center_info.html', context)
 
 
 # /user/order
@@ -256,6 +280,7 @@ class AddressView(LoginRequiredMixin, View):
 		# 	address = Address.objects.get(user=user, is_default=True)
 		# except Address.DoesNotExist:
 		# 	address = None
+		# 获取用户信息
 		address = Address.objects.get_default_address(user)
 		return render(request, 'user_center_site.html', {'page': 'address', 'address': address})
 
