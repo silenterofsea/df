@@ -12,11 +12,9 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
-import pymysql
 import sys
 
 
-pymysql.install_as_MySQLdb()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
@@ -44,10 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tinymce',
-    'cart',
-    'goods',
-    'order',
-    'user',
+    'apps.cart',
+    'apps.goods',
+    'apps.order',
+    'apps.user',
 ]
 
 MIDDLEWARE = [
@@ -158,3 +156,33 @@ EMAIL_PORT = 25     # 发件箱的SMTP服务器端口
 EMAIL_HOST_USER = 'janrone@163.com'    # 发送邮件的邮箱地址
 EMAIL_HOST_PASSWORD = 'jiaozhitou66'   # 发送邮件的邮箱密码(这里使用的是授权码)
 EMAIL_PROM = '天天生鲜<janrone@163.com>'  # 收件人看到的发件人
+
+# redis缓存服务器
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/9",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# 配置session的存储
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+# 配置没有登录去访问需要登录页面时候的跳转页面
+LOGIN_URL = '/user/login'
+
+# 设置Django的文件存储类
+DEFAULT_FILE_STORAGE = 'utils.fdfs.storage.FDFSStorage'
+
+
+# 设置FDFS使用的配置文件
+FDFS_CLIENT_CONF = '.utils.fdfs.client.conf'
+
+#
+FDFS_URL = 'http://45.122.138.81:8888/'
+
+

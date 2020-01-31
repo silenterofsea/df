@@ -4,14 +4,13 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 # from django.core.mail import send_mail
-from .models import User
+from apps.user.models import User, Address
 import re
 from django.views.generic import View
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import SignatureExpired
 from utils.mixin import LoginRequiredMixin
 from celery_tasks.tasks import send_register_active_email
-from .models import Address
 from django_redis import get_redis_connection
 from apps.goods.models import GoodsSKU
 

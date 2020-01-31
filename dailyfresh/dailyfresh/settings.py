@@ -12,11 +12,9 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
-import pymysql
 import sys
 
 
-pymysql.install_as_MySQLdb()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
@@ -47,7 +45,7 @@ INSTALLED_APPS = [
     'apps.cart',
     'apps.goods',
     'apps.order',
-    'user',
+    'apps.user',
 ]
 
 MIDDLEWARE = [
@@ -178,12 +176,12 @@ SESSION_CACHE_ALIAS = "default"
 LOGIN_URL = '/user/login'
 
 # 设置Django的文件存储类
-DEFAULT_FILES_STORAGE = 'utils.fdfs.storage.FDFSStorage'
+DEFAULT_FILE_STORAGE = 'utils.fdfs.storage.FDFSStorage'
 
-# 设置FDFS使用的配置文件
-FDFS_CLIENT_CONF = '.utils.fdfs.client.conf'
+# 设置fdfs使用的client.conf文件路径
+FDFS_CLIENT_CONF = './utils/fdfs/client.conf'
 
-#
+# 设置fdfs存储服务器上nginx的IP和端口号
 FDFS_URL = 'http://45.122.138.81:8888/'
 
 
