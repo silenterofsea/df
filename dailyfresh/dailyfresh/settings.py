@@ -177,3 +177,13 @@ SESSION_CACHE_ALIAS = "default"
 # 配置没有登录去访问需要登录页面时候的跳转页面
 LOGIN_URL = '/user/login'
 
+# 设置Django的文件存储类
+DEFAULT_FILES_STORAGE = 'utils.fdfs.storage.FDFSStorage'
+
+# 设置FDFS使用的配置文件
+FDFS_CLIENT_CONF = '.utils.fdfs.client.conf'
+
+#
+FDFS_URL = 'http://45.122.138.81:8888/'
+
+
