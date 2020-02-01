@@ -16,7 +16,8 @@ import os
 from apps.goods.models import GoodsType, IndexGoodsBanner, IndexPromotionBanner, IndexTypeGoodsBanner
 from django_redis import get_redis_connection
 # 创建一个celery实例
-app = Celery('celery_tasks.tasks', broker='redis://127.0.0.1:6379/8')
+app = Celery('celery_tasks.tasks', broker='redis://:redis0451392aa@45.122.138.81:6379/8')
+# BROKER_URL='redis://:xxxxx@127.0.0.1:6379/2'　其中xxxxxx为密码，ps:前面必须有冒号　
 
 
 @app.task
@@ -59,7 +60,7 @@ def generate_static_index_html():
         type.image_banners = image_banners
         type.title_banners = title_banners
 
-    # 由于这个任务是为了生成共用的首页页面，因此并不需要登录信息
+    # 因为是通用模板所以肯定是没有登录的情况下的，所以并不需要登录的信息
     # # 获取用户购物车中商品的数目
     # user = request.user
     # cart_count = 0
@@ -83,9 +84,10 @@ def generate_static_index_html():
     # context = RequestContext(request, context)  # 可以省略
     # 3.模板渲染
     static_index_html = temp.render(context)
-
+    print(static_index_html)
     # 生成首页对应静态文件
     save_path = os.path.join(settings.BASE_DIR, 'static/index.html')
+    print(save_path)
     with open(save_path, 'w') as f:
         f.write(static_index_html)
 

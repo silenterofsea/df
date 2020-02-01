@@ -83,9 +83,11 @@ def generate_static_index_html():
     # context = RequestContext(request, context)  # 可以省略
     # 3.模板渲染
     static_index_html = temp.render(context)
-
+    print(static_index_html)
+    
     # 生成首页对应静态文件
     save_path = os.path.join(settings.BASE_DIR, 'static/index.html')
+    print(save_path)
     with open(save_path, 'w') as f:
         f.write(static_index_html)
 

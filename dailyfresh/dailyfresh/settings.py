@@ -158,6 +158,11 @@ EMAIL_HOST_PASSWORD = 'jiaozhitou66'   # 发送邮件的邮箱密码(这里使�
 EMAIL_PROM = '天天生鲜<janrone@163.com>'  # 收件人看到的发件人
 
 # redis缓存服务器
+# 45.122.138.81
+# root
+# !@#RF53mcR#726
+# session应该保存在和网站所在的同一个服务器上
+# 发送邮件的redis,应该在另外的服务器上
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
