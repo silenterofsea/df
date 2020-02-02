@@ -16,7 +16,7 @@ django.setup()
 from apps.goods.models import GoodsType, IndexGoodsBanner, IndexPromotionBanner, IndexTypeGoodsBanner
 from django_redis import get_redis_connection
 # 创建一个celery实例
-app = Celery('celery_tasks.tasks', broker='redis://127.0.0.1:6379/8')
+app = Celery('celery_tasks.tasks', broker='redis://:redis0451392aa@127.0.0.1:6379/8')
 
 
 @app.task

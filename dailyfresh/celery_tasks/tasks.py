@@ -8,9 +8,9 @@ import time
 
 
 import os
-# import django
-# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dailyfresh.settings')
-# django.setup()
+import django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dailyfresh.settings')
+django.setup()
 
 
 from apps.goods.models import GoodsType, IndexGoodsBanner, IndexPromotionBanner, IndexTypeGoodsBanner
