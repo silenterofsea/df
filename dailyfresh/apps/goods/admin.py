@@ -29,27 +29,87 @@ class BaseModelAdmin(admin.ModelAdmin):
 
 
 class GoodsTypeAdmin(BaseModelAdmin):
-    pass
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        from celery_tasks.tasks import generate_static_index_html
+        generate_static_index_html.delay()
+        cache.delete('index_page_data')
+
+    def delete_model(self, request, obj):
+        super().delete_model(request, obj)
+        from celery_tasks.tasks import generate_static_index_html
+        generate_static_index_html.delay()
+        cache.delete('index_page_data')
 
 
 class IndexGoodsBannerAdmin(BaseModelAdmin):
-    pass
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        from celery_tasks.tasks import generate_static_index_html
+        generate_static_index_html.delay()
+        cache.delete('index_page_data')
+
+    def delete_model(self, request, obj):
+        super().delete_model(request, obj)
+        from celery_tasks.tasks import generate_static_index_html
+        generate_static_index_html.delay()
+        cache.delete('index_page_data')
 
 
 class IndexTypeGoodsBannerAdmin(BaseModelAdmin):
-    pass
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        from celery_tasks.tasks import generate_static_index_html
+        generate_static_index_html.delay()
+        cache.delete('index_page_data')
+
+    def delete_model(self, request, obj):
+        super().delete_model(request, obj)
+        from celery_tasks.tasks import generate_static_index_html
+        generate_static_index_html.delay()
+        cache.delete('index_page_data')
 
 
 class IndexPromotionBannerAdmin(BaseModelAdmin):
-    pass
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        from celery_tasks.tasks import generate_static_index_html
+        generate_static_index_html.delay()
+        cache.delete('index_page_data')
+
+    def delete_model(self, request, obj):
+        super().delete_model(request, obj)
+        from celery_tasks.tasks import generate_static_index_html
+        generate_static_index_html.delay()
+        cache.delete('index_page_data')
 
 
 class GoodsSPUAdmin(BaseModelAdmin):
-    pass
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        from celery_tasks.tasks import generate_static_index_html
+        generate_static_index_html.delay()
+        cache.delete('index_page_data')
+
+    def delete_model(self, request, obj):
+        super().delete_model(request, obj)
+        from celery_tasks.tasks import generate_static_index_html
+        generate_static_index_html.delay()
+        cache.delete('index_page_data')
 
 
 class GoodsSKUAdmin(BaseModelAdmin):
-    pass
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        from celery_tasks.tasks import generate_static_index_html
+        generate_static_index_html.delay()
+        cache.delete('index_page_data')
+
+    def delete_model(self, request, obj):
+        super().delete_model(request, obj)
+        from celery_tasks.tasks import generate_static_index_html
+        generate_static_index_html.delay()
+        cache.delete('index_page_data')
 
 
 admin.site.register(GoodsType, GoodsTypeAdmin)

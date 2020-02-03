@@ -42,6 +42,7 @@ def send_register_active_email(to_email, username, token):
 @app.task
 def generate_static_index_html():
     """产生首页静态页面"""
+    time.sleep(5)
     # 查询商品的种类信息
     types = GoodsType.objects.all()
     # 获取首页轮播的商品的信息

@@ -166,7 +166,7 @@ EMAIL_PROM = '天天生鲜<janrone@163.com>'  # 收件人看到的发件人
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/9",
+        "LOCATION": "redis://:redis0451392aa@45.122.138.81:6379/9",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
