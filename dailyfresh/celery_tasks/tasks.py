@@ -17,6 +17,7 @@ from apps.goods.models import GoodsType, IndexGoodsBanner, IndexPromotionBanner,
 from django_redis import get_redis_connection
 # 创建一个celery实例
 app = Celery('celery_tasks.tasks', broker='redis://:redis0451392aa@45.122.138.81:6379/8')
+# app = Celery('celery_tasks.tasks', broker='redis://127.0.0.1:6379/8')
 # BROKER_URL='redis://:xxxxx@127.0.0.1:6379/2'　其中xxxxxx为密码，ps:前面必须有冒号　
 
 

@@ -31,7 +31,7 @@
 		</ul>
 		<div class="slide fl">
 			<ul class="slide_pics">
-				{% for banner in goods_banners %}
+				{% for banner in goods_banner %}
 				<li><a href="{% url 'goods:detail' banner.sku.id  %}"><img src="{{ banner.image.url }}" alt="幻灯片"></a></li>
 				{% endfor %}
 			</ul>
@@ -40,7 +40,7 @@
 			<ul class="points"></ul>
 		</div>
 		<div class="adv fl">
-			{% for banner in promotion_banners %}
+			{% for banner in promotion_banner %}
 			<a href="{{ banner.url }}"><img src="{{ banner.image.url }}"></a>
 
 			{% endfor %}
@@ -54,7 +54,7 @@
 			<div class="subtitle fl">
 				<span>|</span>
 				{# 首页展示分类文字商品信息 #}
-				{% for banner in type.title_banners %}
+				{% for banner in type.title_banner %}
 				<a href="{% url 'goods:detail' banner.sku.id %}">{{ banner.sku.name }}</a>
 				{% endfor %}
 			</div>
@@ -64,7 +64,7 @@
 		<div class="goods_con clearfix">
 			<div class="goods_banner fl"><img src="{{ type.image.url }}"></div>
 			<ul class="goods_list fl">
-				{% for banner in type.image_banners %}
+				{% for banner in type.image_banner %}
 				<li>
 					<h4><a href="{% url 'goods:detail' banner.sku.id %}">{{ banner.sku.name }}</a></h4>
 					<a href="{% url 'goods:detail' banner.sku.id %}">
