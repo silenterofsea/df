@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+query(搜索的关键词):{{ query }}<br/>
+page(当前page页的对象):{{ page }}<br/>
+{% if page.object_list %}
+page中有数据<br/>
+{% else %}
+page中没有数据<br/>
+{% endif %}
+page可以获取信息，遍历之：{{ page.object.name }}<br/>
+<ul>
+    {% for item in page %}
+    <li>{{ item.object.name }}</li>
+    {% endfor %}
+</ul>
+paginator(分页对象):{{ paginator }}<br/>
+{{ paginator.num_pages }}
+
+
+<br/><br/><br/><br/>
+下面是别人测试有用的：<br/>
+搜索的关键字： {{ query }} <br/>
+当前页的Page对象： {{ page.object_list }}  <br/>
+<ul>
+    {% for item in page %}
+        <li>{{ item.object }}</li>
+    {% endfor %}
+</ul>
+分页Paginator对象: {{ paginator }} <br/>
+
+
+
+</body>
+</html>

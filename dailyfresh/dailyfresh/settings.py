@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tinymce',
+    'haystack',  # 全文搜索框架django-haystack==2.8.1
+    'tinymce',  # 富文本编辑器
     'apps.cart',
     'apps.goods',
     'apps.order',
@@ -189,4 +190,13 @@ FDFS_CLIENT_CONF = './utils/fdfs/client.conf'
 # 设置fdfs存储服务器上nginx的IP和端口号
 FDFS_URL = 'http://45.122.138.81:8888/'
 
-
+# haystack全文搜索框架配置(whoosh的配置，官方文档中也有其他的配置哦)
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        # 使用whoosh引擎
+        'ENGINE': 'apps.goods.whoosh_cn_backend.WhooshEngine',
+        # 索引路径: 体会一下这两个路径的区别
+        # 'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    },
+}
