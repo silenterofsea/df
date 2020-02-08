@@ -307,12 +307,14 @@ class AddressView(LoginRequiredMixin, View):
 		else:
 			is_default = True
 
-		Address.objects.create(user=user,
-							   receiver=receiver,
-							   addr=addr,
-							   zip_code=zip_code,
-							   phone=phone,
-							   is_default=is_default)
+		Address.objects.create(
+			user=user,
+			receiver=receiver,
+			addr=addr,
+			zip_code=zip_code,
+			phone=phone,
+			is_default=is_default
+		)
 		return redirect(reverse('user:address'))
 
 
