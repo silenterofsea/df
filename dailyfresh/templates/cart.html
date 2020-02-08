@@ -266,5 +266,41 @@
 			$('.total_count').children('em').text(total)
 		}
 	});
+
+
+	//　删除
+	$('.cart_list_td').children('.col08').children('a').click(function(){
+		//获取sku_id
+		sku_ul = $(this).parents('ul');
+		csrf = $('input[name="csrfmiddlewaretoken"]').val();
+		sku_id =  $(this).parents('ul').find('.num_show').attr('sku_id');
+		//组织参数
+		params = {
+			'sku_id': sku_id,
+			'csrfmiddlewaretoken': csrf
+		}
+
+		$.post('{% url 'cart:delete' %}', params, function(data){
+			if(data.res == 0){
+				//删除成功
+				sku_ul.remove(); // 移除自身和子元素　empty: 只移除子元素
+				is_checked = sku_ul.find(':checkbox').prop('checked');
+				if(is_checked){
+					//更新页面信息
+					update_page_info();
+				}
+
+				//　设置页面购物车中商品的总件数
+				$('.total_count').children('em').text(data.total_count)
+			}else{
+				alert(data.errmsg);
+			}
+		});
+	});
+
+
+
+
+
 </script>
 {% endblock bottomfiles %}

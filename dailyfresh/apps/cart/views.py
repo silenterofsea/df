@@ -197,3 +197,77 @@ class CartUpdateView(View):
             'errmsg': '数据更新成功'
         })
 
+
+# 删除购物车记录
+# 采用ajax post请求
+# 前端需要传递的参数:　商品ID-(sku_id)
+# url: /cart/delete
+class CartDeleteView(View):
+    '''删除购物车商品'''
+    def post(self, request):
+        # 判断用户是否登录
+        user = request.user
+        if not user.is_authenticated:
+            # 用户没有登录
+            return JsonResponse({
+                'res': 1,
+                'errmsg': '用户需要登录才能发起这个请求'
+            })
+
+        # 接受数据
+        sku_id = request.POST.get('sku_id')
+
+        # 检查是否为空
+        if not all([sku_id]):
+            return JsonResponse({
+                'res': 2,
+                'errmsg': '数据不完整，请重新确认数据'
+            })
+
+        # 确定数据库中存在该商品信息
+        try:
+            GoodsSKU.objects.get(id=sku_id)
+        except GoodsSKU.DoesNotExist:
+            # 数据不存在
+            return JsonResponse({
+                'res': 3,
+                'errmsg': '数据库中不存在该商品信息，请重新确认'
+            })
+        # 业务处理：删除购物车记录
+        conn = get_redis_connection('default')
+        cart_key = 'cart_%d' % user.id
+
+        # 删除　hdel()
+        conn.hdel(cart_key, sku_id)
+
+        # 计算用户购物车中商品的总件数{'1':5,'2':3}
+        total_count = 0
+        vals = conn.hvals(cart_key)
+        for val in vals:
+            total_count += int(val)
+
+        return JsonResponse({
+            'res': 0,
+            'total_count': total_count,
+            'message': '删除成功'
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
