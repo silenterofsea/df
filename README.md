@@ -31,5 +31,9 @@
 
 7:订单模块
 
-    在订单生成的过程中，没有检测订单数目是否会超过库存;并且可能存在注入的点
+    在订单生成的过程中,可能存在注入的点
+    
+8:不要忘记把mysql的隔离级别改成ＲＣ（read committed）：
+        
+        transaction-isolation = READ-COMMITTED
 
