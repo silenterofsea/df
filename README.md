@@ -37,3 +37,6 @@
         
         transaction-isolation = READ-COMMITTED
 
+9:缺失物流信息：快递100或者淘宝接口
+
+10:实现后台提交支付所需的帐号，完成支付接口：支付宝\微信\applepay,这三个要通
