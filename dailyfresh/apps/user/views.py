@@ -285,9 +285,11 @@ class UserOrderView(LoginRequiredMixin, View):
 
 			# 动态给order增加属性，保存订单商品信息
 			order.order_skus = order_skus
+			# 动态给order增加属性, 保存订单状态标题
+			order.status_name = OrderInfo.ORDER_STATUS[order.order_status]
 
 		# 分页
-		paginator = Paginator(orders, 1)
+		paginator = Paginator(orders, 3)
 
 		# 获取第page页的内容
 		try:
