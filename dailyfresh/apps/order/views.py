@@ -375,3 +375,34 @@ class OrderCommitView(View):
             'msg': '订单创建成功'
         })
 
+
+# 前端采用ajax post请求, 参数：order_id
+class OrderPayView(View):
+    def post(self, request):
+        # 验证用户是否登录
+        user = request.user
+        if not user.is_authenticated:
+            return JsonResponse({
+                'res': 1,
+                'msg': '请先登录才能支付'
+            })
+        # 接受参数
+        order_id = request.POST.get('order_id')
+        # 校验参数
+        if not all([order_id]):
+            return JsonResponse({
+                'res': 2,
+                'msg': '参数错误'
+            })
+
+        try:
+            OrderInfo.objects.get(order_id=order_id)
+        except OrderInfo.DoesNotExist:
+            return JsonResponse({
+                'res': 3,
+                'msg': '参数错误'
+            })
+        # 业务处理：用python　sdk调用支付宝接口支付
+        # 返回应答
+        pass
+
