@@ -22,8 +22,8 @@
 		<a href="{% url 'user:address' %}" class="edit_site">编辑收货地址</a>
 
 	</div>
-	
-	<h3 class="common_title">支付方式</h3>	
+
+	<h3 class="common_title">支付方式</h3>
 	<div class="common_list_con clearfix">
 		<div class="pay_style_con clearfix">
 			<input type="radio" name="pay_style" value="1" checked>
@@ -38,14 +38,14 @@
 	</div>
 
 	<h3 class="common_title">商品列表</h3>
-	
+
 	<div class="common_list_con clearfix">
 		<ul class="goods_list_th clearfix">
 			<li class="col01">商品名称</li>
 			<li class="col02">商品单位</li>
 			<li class="col03">商品价格</li>
 			<li class="col04">数量</li>
-			<li class="col05">小计</li>		
+			<li class="col05">小计</li>
 		</ul>
 		{% for sku in skus %}
 		<ul class="goods_list_td clearfix">
@@ -73,7 +73,7 @@
 	<div class="order_submit clearfix">
 		{% csrf_token %}
 		<a href="javascript:;"  sku_ids="{{ sku_ids }}" id="order_btn">提交订单</a>
-	</div>	
+	</div>
 
 {% endblock body %}
 
@@ -115,7 +115,7 @@
 
 						setTimeout(function(){
 							$('.popup_con').fadeOut('fast',function(){
-								window.location.href = '{% url 'user:order' %}';
+								window.location.href = '{% url 'user:order' 1 %}';
 							});
 						},3000)
 

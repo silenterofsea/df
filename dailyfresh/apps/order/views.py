@@ -8,11 +8,15 @@ from apps.goods.models import GoodsSKU
 from apps.user.models import Address
 from apps.order.models import OrderInfo, OrderGoods
 from datetime import datetime
+from alipay import AliPay
+from django.conf import settings
+from utils.mixin import LoginRequiredMixin
 
 
 # Create your views here.
 # order/pay
-class OrderPlaceView(View):
+class OrderPlaceView(LoginRequiredMixin, View):
+    """提交订单页面"""
     def post(self, request):
         '''提交订单页面显示'''
         # 获取登录的用户
@@ -394,15 +398,85 @@ class OrderPayView(View):
                 'res': 2,
                 'msg': '参数错误'
             })
-
+        # 获取该订单
         try:
-            OrderInfo.objects.get(order_id=order_id)
+            order = OrderInfo.objects.get(order_id=order_id, user=user, order_status=1)
         except OrderInfo.DoesNotExist:
             return JsonResponse({
                 'res': 3,
                 'msg': '参数错误'
             })
+
+        # 确认支付方式
+        if order.pay_method == 1:
+            return JsonResponse({'res': 4, 'msg': '该支付方式还未开通'})
+        elif order.pay_method == 2:
+            return JsonResponse({'res': 4, 'msg': '该支付方式还未开通'})
+        elif order.pay_method == 3:  # 支付宝支付
+            # print(settings.ALIPAY_APP_ID)
+            # print(settings.APP_PRIVATE_KEY)
+            # print(open(settings.APP_PRIVATE_KEY).read())
+            # print(settings.ALIPAY_PUBLIC_KEY)
+            # print(open(settings.ALIPAY_PUBLIC_KEY).read())
+            # 业务处理：用python　sdk调用支付宝接口支付
+            alipay = AliPay(
+                appid=settings.ALIPAY_APP_ID,
+                app_notify_url=None,  # 默认回调url
+                app_private_key_string=open(settings.APP_PRIVATE_KEY).read(),
+                # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+                alipay_public_key_string=open(settings.ALIPAY_PUBLIC_KEY).read(),
+                sign_type="RSA2",  # RSA 或者 RSA2
+                debug=True  # 默认False
+            )
+
+            # 电脑网站支付，需要跳转到https://openapi.alipaydev.com/gateway.do? + order_string
+            order_string = alipay.api_alipay_trade_page_pay(
+                out_trade_no=order.order_id,
+                total_amount=str(order.total_price),
+                subject="JPC_test_%d" % user.id,
+                return_url=None,
+                notify_url=None  # 可选, 不填则使用默认notify url
+            )
+
+            pay_url = 'https://openapi.alipaydev.com/gateway.do?' + order_string
+            # 返回应答
+            return JsonResponse({
+                'res': 0,
+                'pay_url': pay_url
+            })
+            # return JsonResponse({'res': 4, 'msg': '支付宝支付'})
+        elif order.pay_method == 4:
+            return JsonResponse({'res': 4, 'msg': '该支付方式还未开通'})
+        else:
+            return JsonResponse({
+                'res': 4,
+                'msg': '未知支付方式错误'
+            })
+
         # 业务处理：用python　sdk调用支付宝接口支付
+        alipay = AliPay(
+            appid=settings.ALIPAY_APP_ID,
+            app_notify_url=None,  # 默认回调url
+            app_private_key_string=settings.APP_PRIVATE_KEY,
+            # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+            alipay_public_key_string=settings.ALIPAY_PUBLIC_KEY,
+            sign_type="RSA",  # RSA 或者 RSA2
+            debug=True  # 默认False
+        )
+
+        # 电脑网站支付，需要跳转到https://openapi.alipaydev.com/gateway.do? + order_string
+        order_string = alipay.api_alipay_trade_page_pay(
+            out_trade_no=order.order_id,
+            total_amount=str(order.order_price),
+            subject="JPC_test_%d" % order_id,
+            return_url=None,
+            notify_url=None  # 可选, 不填则使用默认notify url
+        )
+
+        pay_url = 'https://openapi.alipaydev.com/gateway.do?' + order_string
         # 返回应答
-        pass
+        return JsonResponse({
+            'res': 0,
+            'pay_url': pay_url
+        })
 

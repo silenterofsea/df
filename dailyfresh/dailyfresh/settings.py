@@ -205,3 +205,15 @@ HAYSTACK_CONNECTIONS = {
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 6  # 指定搜索结果每页显示多少条信息
+
+# alipy_app_id
+ALIPAY_APP_ID = 2016101800713373
+
+# app_private_key_string
+APP_PRIVATE_KEY = os.path.join(BASE_DIR, 'app_pem/alipay/app_private_key.pem')
+
+# alipay_public_key_string
+ALIPAY_PUBLIC_KEY = os.path.join(BASE_DIR, 'app_pem/alipay/alipay_public_key.pem')
+
+
+
